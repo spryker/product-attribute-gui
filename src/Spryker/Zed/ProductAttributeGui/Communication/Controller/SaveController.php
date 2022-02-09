@@ -67,7 +67,7 @@ class SaveController extends AbstractController
             static::PARAM_ID_PRODUCT_ABSTRACT,
         ));
 
-        $json = (string)$request->request->get(static::PARAM_JSON);
+        $json = $request->request->get(static::PARAM_JSON);
         $data = json_decode($json, true);
 
         $this->getFactory()
@@ -92,7 +92,7 @@ class SaveController extends AbstractController
             static::PARAM_ID_PRODUCT,
         ));
 
-        $json = (string)$request->request->get(static::PARAM_JSON);
+        $json = $request->request->get(static::PARAM_JSON);
         $data = json_decode($json, true);
 
         $this->getFactory()
