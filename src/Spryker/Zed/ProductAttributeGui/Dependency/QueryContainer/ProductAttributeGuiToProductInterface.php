@@ -12,13 +12,7 @@ use Orm\Zed\Product\Persistence\SpyProductQuery;
 
 interface ProductAttributeGuiToProductInterface
 {
-    /**
-     * @return \Orm\Zed\Product\Persistence\SpyProductAbstractQuery
-     */
     public function queryProductAbstract(): SpyProductAbstractQuery;
 
-    /**
-     * @return \Orm\Zed\Product\Persistence\SpyProductQuery
-     */
     public function queryProduct(): SpyProductQuery;
 }

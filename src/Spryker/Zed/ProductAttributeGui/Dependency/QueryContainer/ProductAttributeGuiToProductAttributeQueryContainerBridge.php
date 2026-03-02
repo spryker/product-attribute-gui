@@ -26,9 +26,6 @@ class ProductAttributeGuiToProductAttributeQueryContainerBridge implements Produ
         $this->productAttributeQueryContainer = $productAttributeQueryContainer;
     }
 
-    /**
-     * @return \Orm\Zed\Product\Persistence\SpyProductAttributeKeyQuery
-     */
     public function queryProductAttributeKey(): SpyProductAttributeKeyQuery
     {
         return $this->productAttributeQueryContainer
@@ -46,18 +43,12 @@ class ProductAttributeGuiToProductAttributeQueryContainerBridge implements Produ
             ->queryProductAttributeKeyByKeys($keys);
     }
 
-    /**
-     * @return \Orm\Zed\ProductAttribute\Persistence\SpyProductManagementAttributeQuery
-     */
     public function queryProductManagementAttribute(): SpyProductManagementAttributeQuery
     {
         return $this->productAttributeQueryContainer
             ->queryProductManagementAttribute();
     }
 
-    /**
-     * @return \Orm\Zed\ProductAttribute\Persistence\SpyProductManagementAttributeValueQuery
-     */
     public function queryProductManagementAttributeValue(): SpyProductManagementAttributeValueQuery
     {
         return $this->productAttributeQueryContainer

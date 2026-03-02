@@ -13,9 +13,6 @@ use Orm\Zed\ProductAttribute\Persistence\SpyProductManagementAttributeValueQuery
 
 interface ProductAttributeGuiToProductAttributeQueryContainerInterface
 {
-    /**
-     * @return \Orm\Zed\Product\Persistence\SpyProductAttributeKeyQuery
-     */
     public function queryProductAttributeKey(): SpyProductAttributeKeyQuery;
 
     /**
@@ -25,14 +22,8 @@ interface ProductAttributeGuiToProductAttributeQueryContainerInterface
      */
     public function queryProductAttributeKeyByKeys(array $keys): SpyProductAttributeKeyQuery;
 
-    /**
-     * @return \Orm\Zed\ProductAttribute\Persistence\SpyProductManagementAttributeQuery
-     */
     public function queryProductManagementAttribute(): SpyProductManagementAttributeQuery;
 
-    /**
-     * @return \Orm\Zed\ProductAttribute\Persistence\SpyProductManagementAttributeValueQuery
-     */
     public function queryProductManagementAttributeValue(): SpyProductManagementAttributeValueQuery;
 
     /**

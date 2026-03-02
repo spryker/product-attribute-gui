@@ -99,21 +99,11 @@ class ProductAttributeGuiToProductAttributeBridge implements ProductAttributeGui
         $this->productAttributeFacade->saveConcreteAttributes($idProduct, $attributes);
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return array
-     */
     public function extractKeysFromAttributes(array $attributes): array
     {
         return $this->productAttributeFacade->extractKeysFromAttributes($attributes);
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return array
-     */
     public function extractValuesFromAttributes(array $attributes): array
     {
         return $this->productAttributeFacade->extractValuesFromAttributes($attributes);
@@ -166,19 +156,11 @@ class ProductAttributeGuiToProductAttributeBridge implements ProductAttributeGui
         return $this->productAttributeFacade->getProductManagementAttribute($idProductManagementAttribute);
     }
 
-    /**
-     * @return array
-     */
     public function getAttributeAvailableTypes(): array
     {
         return $this->productAttributeFacade->getAttributeAvailableTypes();
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductManagementAttributeTransfer $productManagementAttributeTransfer
-     *
-     * @return \Generated\Shared\Transfer\ProductManagementAttributeTransfer
-     */
     public function createProductManagementAttribute(ProductManagementAttributeTransfer $productManagementAttributeTransfer): ProductManagementAttributeTransfer
     {
         return $this->productAttributeFacade->createProductManagementAttribute($productManagementAttributeTransfer);
@@ -195,11 +177,6 @@ class ProductAttributeGuiToProductAttributeBridge implements ProductAttributeGui
         return $this->productAttributeFacade->findAttributeTranslationByKey($attributeKey, $localeTransfer);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductManagementAttributeTransfer $productManagementAttributeTransfer
-     *
-     * @return void
-     */
     public function translateProductManagementAttribute(
         ProductManagementAttributeTransfer $productManagementAttributeTransfer
     ): void {
@@ -217,11 +194,6 @@ class ProductAttributeGuiToProductAttributeBridge implements ProductAttributeGui
         return $this->productAttributeFacade->suggestUnusedAttributeKeys($searchText, $limit);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductManagementAttributeTransfer $productManagementAttributeTransfer
-     *
-     * @return \Generated\Shared\Transfer\ProductManagementAttributeTransfer
-     */
     public function updateProductManagementAttribute(
         ProductManagementAttributeTransfer $productManagementAttributeTransfer
     ): ProductManagementAttributeTransfer {

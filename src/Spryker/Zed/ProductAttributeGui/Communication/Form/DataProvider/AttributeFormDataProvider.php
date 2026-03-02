@@ -24,10 +24,6 @@ class AttributeFormDataProvider
      */
     protected $productAttributeFacade;
 
-    /**
-     * @param \Spryker\Zed\ProductAttributeGui\Dependency\QueryContainer\ProductAttributeGuiToProductAttributeQueryContainerInterface $productAttributeQueryContainer
-     * @param \Spryker\Zed\ProductAttributeGui\Dependency\Facade\ProductAttributeGuiToProductAttributeInterface $productAttributeFacade
-     */
     public function __construct(
         ProductAttributeGuiToProductAttributeQueryContainerInterface $productAttributeQueryContainer,
         ProductAttributeGuiToProductAttributeInterface $productAttributeFacade

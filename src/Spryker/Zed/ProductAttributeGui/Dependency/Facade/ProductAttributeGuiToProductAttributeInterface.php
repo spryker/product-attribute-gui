@@ -65,18 +65,8 @@ interface ProductAttributeGuiToProductAttributeInterface
      */
     public function saveConcreteAttributes($idProduct, array $attributes): void;
 
-    /**
-     * @param array $attributes
-     *
-     * @return array
-     */
     public function extractKeysFromAttributes(array $attributes): array;
 
-    /**
-     * @param array $attributes
-     *
-     * @return array
-     */
     public function extractValuesFromAttributes(array $attributes): array;
 
     /**
@@ -112,16 +102,8 @@ interface ProductAttributeGuiToProductAttributeInterface
      */
     public function getProductManagementAttribute($idProductManagementAttribute): ?ProductManagementAttributeTransfer;
 
-    /**
-     * @return array
-     */
     public function getAttributeAvailableTypes(): array;
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductManagementAttributeTransfer $productManagementAttributeTransfer
-     *
-     * @return \Generated\Shared\Transfer\ProductManagementAttributeTransfer
-     */
     public function createProductManagementAttribute(
         ProductManagementAttributeTransfer $productManagementAttributeTransfer
     ): ProductManagementAttributeTransfer;
@@ -134,11 +116,6 @@ interface ProductAttributeGuiToProductAttributeInterface
      */
     public function findAttributeTranslationByKey($attributeKey, LocaleTransfer $localeTransfer): ?LocalizedProductManagementAttributeKeyTransfer;
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductManagementAttributeTransfer $productManagementAttributeTransfer
-     *
-     * @return void
-     */
     public function translateProductManagementAttribute(
         ProductManagementAttributeTransfer $productManagementAttributeTransfer
     ): void;
@@ -151,11 +128,6 @@ interface ProductAttributeGuiToProductAttributeInterface
      */
     public function suggestUnusedAttributeKeys($searchText = '', $limit = 10): array;
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductManagementAttributeTransfer $productManagementAttributeTransfer
-     *
-     * @return \Generated\Shared\Transfer\ProductManagementAttributeTransfer
-     */
     public function updateProductManagementAttribute(
         ProductManagementAttributeTransfer $productManagementAttributeTransfer
     ): ProductManagementAttributeTransfer;

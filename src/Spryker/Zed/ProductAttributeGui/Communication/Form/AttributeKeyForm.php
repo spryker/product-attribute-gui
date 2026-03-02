@@ -31,11 +31,6 @@ class AttributeKeyForm extends AbstractType
      */
     public const FIELD_KEY_HIDDEN_ID = 'key_hidden_id';
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     *
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

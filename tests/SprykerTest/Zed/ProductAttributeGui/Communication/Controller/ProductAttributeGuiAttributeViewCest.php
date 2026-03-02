@@ -23,11 +23,6 @@ use SprykerTest\Zed\ProductAttributeGui\ProductAttributeGuiCommunicationTester;
  */
 class ProductAttributeGuiAttributeViewCest
 {
-    /**
-     * @param \SprykerTest\Zed\ProductAttributeGui\ProductAttributeGuiCommunicationTester $i
-     *
-     * @return void
-     */
     public function breadcrumbIsVisible(ProductAttributeGuiCommunicationTester $i): void
     {
         $i->listDataTable(ProductAttributeGuiAttributeListPage::URL . '/table');

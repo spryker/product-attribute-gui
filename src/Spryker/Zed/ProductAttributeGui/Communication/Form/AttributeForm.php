@@ -85,11 +85,6 @@ class AttributeForm extends AbstractType
      */
     public const GROUP_UNIQUE_KEY = 'unique_key_group';
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     *
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([

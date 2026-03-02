@@ -21,11 +21,6 @@ class AttributeCsrfForm extends AbstractType
      */
     public const CSRF_TOKEN_NAME = 'csrf-token';
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     *
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

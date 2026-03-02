@@ -25,17 +25,11 @@ class ProductAttributeGuiToProductBridge implements ProductAttributeGuiToProduct
         $this->productQueryContainer = $productQueryContainer;
     }
 
-    /**
-     * @return \Orm\Zed\Product\Persistence\SpyProductAbstractQuery
-     */
     public function queryProductAbstract(): SpyProductAbstractQuery
     {
         return $this->productQueryContainer->queryProductAbstract();
     }
 
-    /**
-     * @return \Orm\Zed\Product\Persistence\SpyProductQuery
-     */
     public function queryProduct(): SpyProductQuery
     {
         return $this->productQueryContainer->queryProduct();

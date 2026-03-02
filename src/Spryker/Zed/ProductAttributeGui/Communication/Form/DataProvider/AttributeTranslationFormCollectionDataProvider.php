@@ -32,11 +32,6 @@ class AttributeTranslationFormCollectionDataProvider
      */
     protected $productAttributeFacade;
 
-    /**
-     * @param \Spryker\Zed\ProductAttributeGui\Dependency\Facade\ProductAttributeGuiToProductAttributeInterface $productAttributeFacade
-     * @param \Spryker\Zed\ProductAttributeGui\Dependency\QueryContainer\ProductAttributeGuiToProductAttributeQueryContainerInterface $productAttributeQueryContainer
-     * @param \Spryker\Zed\ProductAttributeGui\Dependency\Facade\ProductAttributeGuiToLocaleInterface $localeFacade
-     */
     public function __construct(
         ProductAttributeGuiToProductAttributeInterface $productAttributeFacade,
         ProductAttributeGuiToProductAttributeQueryContainerInterface $productAttributeQueryContainer,

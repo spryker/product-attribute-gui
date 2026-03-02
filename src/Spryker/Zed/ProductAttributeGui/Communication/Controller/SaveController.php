@@ -102,11 +102,6 @@ class SaveController extends AbstractController
         return $this->createJsonResponse(static::MESSAGE_PRODUCT_ATTRIBUTES_SAVED);
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return bool
-     */
     protected function validateCsrfToken(Request $request): bool
     {
         $csrfTokenValue = $request->request->get(static::CSRF_TOKEN_NAME, '');
@@ -121,13 +116,6 @@ class SaveController extends AbstractController
         return $csrfForm->isValid();
     }
 
-    /**
-     * @param string $message
-     * @param bool $isSuccess
-     * @param int $statusCode
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     protected function createJsonResponse(string $message, bool $isSuccess = true, int $statusCode = Response::HTTP_OK): JsonResponse
     {
         return $this->jsonResponse([

@@ -49,11 +49,6 @@ class AttributeTranslationForm extends AbstractType
      */
     public const FIELD_VALUE_TRANSLATIONS = 'value_translations';
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     *
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

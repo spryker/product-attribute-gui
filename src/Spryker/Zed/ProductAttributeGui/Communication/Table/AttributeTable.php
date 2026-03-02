@@ -36,9 +36,6 @@ class AttributeTable extends AbstractTable
      */
     protected $productAttributeQueryContainer;
 
-    /**
-     * @param \Spryker\Zed\ProductAttributeGui\Dependency\QueryContainer\ProductAttributeGuiToProductAttributeQueryContainerInterface $productAttributeQueryContainer
-     */
     public function __construct(ProductAttributeGuiToProductAttributeQueryContainerInterface $productAttributeQueryContainer)
     {
         $this->productAttributeQueryContainer = $productAttributeQueryContainer;
