@@ -36,4 +36,15 @@
     <transfer name="ProductAbstract">
     </transfer>
 
+    <transfer name="ProductAttributeTableCriteria" strict="true">
+        <property name="withColumns" type="array" singular="withColumn"/>
+        <property name="queryConditions" type="ProductAttributeTableQueryCondition[]" singular="queryCondition"/>
+        <property name="conditionCombineOperator" type="string"/>
+    </transfer>
+
+    <transfer name="ProductAttributeTableQueryCondition" strict="true">
+        <property name="expression" type="string"/>
+        <property name="value" type="string"/>
+    </transfer>
+
 </transfers>

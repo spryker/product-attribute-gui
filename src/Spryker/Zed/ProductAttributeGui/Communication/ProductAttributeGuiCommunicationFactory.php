@@ -7,6 +7,7 @@
 
 namespace Spryker\Zed\ProductAttributeGui\Communication;
 
+use Generated\Shared\Transfer\ProductAttributeTableCriteriaTransfer;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
 use Spryker\Zed\ProductAttributeGui\Communication\Form\AttributeCsrfForm;
 use Spryker\Zed\ProductAttributeGui\Communication\Form\AttributeForm;
@@ -15,10 +16,15 @@ use Spryker\Zed\ProductAttributeGui\Communication\Form\AttributeKeyFormDataProvi
 use Spryker\Zed\ProductAttributeGui\Communication\Form\AttributeTranslationCollectionForm;
 use Spryker\Zed\ProductAttributeGui\Communication\Form\DataProvider\AttributeFormDataProvider;
 use Spryker\Zed\ProductAttributeGui\Communication\Form\DataProvider\AttributeTranslationFormCollectionDataProvider;
+use Spryker\Zed\ProductAttributeGui\Communication\Form\TableFilterForm;
 use Spryker\Zed\ProductAttributeGui\Communication\Table\AttributeTable;
+use Spryker\Zed\ProductAttributeGui\Communication\Table\PluginExecutor\AttributeTablePluginExecutor;
+use Spryker\Zed\ProductAttributeGui\Communication\Table\PluginExecutor\AttributeTablePluginExecutorInterface;
 use Spryker\Zed\ProductAttributeGui\Communication\Transfer\AttributeFormTransferMapper;
+use Spryker\Zed\ProductAttributeGui\Communication\Transfer\AttributeFormTransferMapperInterface;
 use Spryker\Zed\ProductAttributeGui\Communication\Transfer\AttributeTranslationFormTransferMapper;
 use Spryker\Zed\ProductAttributeGui\ProductAttributeGuiDependencyProvider;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @method \Spryker\Zed\ProductAttributeGui\ProductAttributeGuiConfig getConfig()
@@ -108,33 +114,44 @@ class ProductAttributeGuiCommunicationFactory extends AbstractCommunicationFacto
         return $this->getFormFactory()->create(AttributeCsrfForm::class, $data, $options);
     }
 
-    /**
-     * @return \Spryker\Zed\ProductAttributeGui\Communication\Form\DataProvider\AttributeFormDataProvider
-     */
-    public function createAttributeFormDataProvider()
+    public function createAttributeFormDataProvider(): AttributeFormDataProvider
     {
         return new AttributeFormDataProvider(
             $this->getProductAttributeQueryContainer(),
             $this->getProductAttributeFacade(),
+            $this->getAttributeFormDataProviderExpanderPlugins(),
         );
     }
 
-    /**
-     * @return \Spryker\Zed\Gui\Communication\Table\AbstractTable
-     */
-    public function createAttributeTable()
+    public function createAttributeTable(): AttributeTable
     {
         return new AttributeTable(
             $this->getProductAttributeQueryContainer(),
+            $this->createAttributeTablePluginExecutor(),
         );
     }
 
-    /**
-     * @return \Spryker\Zed\ProductAttributeGui\Communication\Transfer\AttributeFormTransferMapperInterface
-     */
-    public function createAttributeFormTransferGenerator()
+    public function createAttributeTablePluginExecutor(): AttributeTablePluginExecutorInterface
     {
-        return new AttributeFormTransferMapper();
+        return new AttributeTablePluginExecutor(
+            $this->getAttributeTableConfigExpanderPlugins(),
+            $this->getAttributeTableHeaderExpanderPlugins(),
+            $this->getAttributeTableDataExpanderPlugins(),
+            $this->getAttributeTableCriteriaExpanderPlugins(),
+        );
+    }
+
+    public function createTableFilterForm(
+        ProductAttributeTableCriteriaTransfer $productAttributeTableCriteriaTransfer,
+    ): FormInterface {
+        return $this->getFormFactory()->create(TableFilterForm::class, $productAttributeTableCriteriaTransfer);
+    }
+
+    public function createAttributeFormTransferGenerator(): AttributeFormTransferMapperInterface
+    {
+        return new AttributeFormTransferMapper(
+            $this->getAttributeFormTransferMapperExpanderPlugins(),
+        );
     }
 
     /**
@@ -207,5 +224,69 @@ class ProductAttributeGuiCommunicationFactory extends AbstractCommunicationFacto
     public function getProductAttributeQueryContainer()
     {
         return $this->getProvidedDependency(ProductAttributeGuiDependencyProvider::QUERY_CONTAINER_PRODUCT_ATTRIBUTE);
+    }
+
+    /**
+     * @return array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeTableConfigExpanderPluginInterface>
+     */
+    public function getAttributeTableConfigExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(ProductAttributeGuiDependencyProvider::PLUGINS_ATTRIBUTE_TABLE_CONFIG_EXPANDER);
+    }
+
+    /**
+     * @return array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeTableHeaderExpanderPluginInterface>
+     */
+    public function getAttributeTableHeaderExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(ProductAttributeGuiDependencyProvider::PLUGINS_ATTRIBUTE_TABLE_HEADER_EXPANDER);
+    }
+
+    /**
+     * @return array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeTableDataExpanderPluginInterface>
+     */
+    public function getAttributeTableDataExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(ProductAttributeGuiDependencyProvider::PLUGINS_ATTRIBUTE_TABLE_DATA_EXPANDER);
+    }
+
+    /**
+     * @return array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeTableCriteriaExpanderPluginInterface>
+     */
+    public function getAttributeTableCriteriaExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(ProductAttributeGuiDependencyProvider::PLUGINS_ATTRIBUTE_TABLE_CRITERIA_EXPANDER);
+    }
+
+    /**
+     * @return array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeFormExpanderPluginInterface>
+     */
+    public function getAttributeFormExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(ProductAttributeGuiDependencyProvider::PLUGINS_ATTRIBUTE_FORM_EXPANDER);
+    }
+
+    /**
+     * @return array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeFormDataProviderExpanderPluginInterface>
+     */
+    public function getAttributeFormDataProviderExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(ProductAttributeGuiDependencyProvider::PLUGINS_ATTRIBUTE_FORM_DATA_PROVIDER_EXPANDER);
+    }
+
+    /**
+     * @return array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeFormTransferMapperExpanderPluginInterface>
+     */
+    public function getAttributeFormTransferMapperExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(ProductAttributeGuiDependencyProvider::PLUGINS_ATTRIBUTE_FORM_TRANSFER_MAPPER_EXPANDER);
+    }
+
+    /**
+     * @return array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeTableFilterFormExpanderPluginInterface>
+     */
+    public function getAttributeTableFilterFormExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(ProductAttributeGuiDependencyProvider::PLUGINS_ATTRIBUTE_TABLE_FILTER_FORM_EXPANDER);
     }
 }

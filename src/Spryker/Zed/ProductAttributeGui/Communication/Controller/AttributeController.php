@@ -7,6 +7,7 @@
 
 namespace Spryker\Zed\ProductAttributeGui\Communication\Controller;
 
+use Generated\Shared\Transfer\ProductAttributeTableCriteriaTransfer;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 use Spryker\Zed\ProductAttributeGui\Communication\Form\AttributeTranslationCollectionForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,27 +58,40 @@ class AttributeController extends AbstractController
     public const MESSAGE_TRANSLATION_UPDATE_SUCCESS = 'Translation was updated successfully.';
 
     /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return array
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $attributeTable = $this
-            ->getFactory()
-            ->createAttributeTable();
+        $productAttributeTableCriteriaTransfer = (new ProductAttributeTableCriteriaTransfer())->fromArray($request->query->all(), true);
+        $tableFilterForm = $this->getFactory()->createTableFilterForm($productAttributeTableCriteriaTransfer);
+        $productAttributeTableCriteriaTransfer = $tableFilterForm->handleRequest($request)->getData();
+
+        $attributeTable = $this->getFactory()
+            ->createAttributeTable()
+            ->applyCriteria($productAttributeTableCriteriaTransfer);
 
         return $this->viewResponse([
             'attributeTable' => $attributeTable->render(),
+            'tableFilterForm' => $tableFilterForm->createView(),
         ]);
     }
 
     /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function tableAction()
+    public function tableAction(Request $request)
     {
-        $attributeTable = $this
-            ->getFactory()
-            ->createAttributeTable();
+        $productAttributeTableCriteriaTransfer = (new ProductAttributeTableCriteriaTransfer())->fromArray($request->query->all(), true);
+        $tableFilterForm = $this->getFactory()->createTableFilterForm($productAttributeTableCriteriaTransfer);
+        $productAttributeTableCriteriaTransfer = $tableFilterForm->handleRequest($request)->getData();
+
+        $attributeTable = $this->getFactory()
+            ->createAttributeTable()
+            ->applyCriteria($productAttributeTableCriteriaTransfer);
 
         return $this->jsonResponse(
             $attributeTable->fetchData(),

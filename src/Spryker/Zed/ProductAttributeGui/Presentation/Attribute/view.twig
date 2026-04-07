@@ -27,9 +27,10 @@
                     <td>{{ 'Super attribute' | trans }}:</td>
                     <td>{{ (attributeTransfer.isSuper ? 'yes' : 'no') | trans }}</td>
                 </tr>
+                {% include '@ProductExperienceManagement/Attribute/partials/visibility-view.twig' ignore missing with {
+                    attributeTransfer: attributeTransfer,
+                } %}
             </table>
-
-            <hr />
 
             <h4>{{ 'Predefined values' | trans }}</h4>
             <table class="table">

@@ -9,8 +9,10 @@
         "spryker/kernel": "^3.30.0",
         "spryker/locale": "^3.0.0 || ^4.0.0",
         "spryker/product": "^5.2.0 || ^6.0.0",
-        "spryker/product-attribute": "^1.0.0",
+        "spryker/product-attribute": "^1.19.0",
+        "spryker/product-attribute-gui-extension": "^1.0.0",
         "spryker/symfony": "^3.0.0",
+        "spryker/transfer": "^3.27.0",
         "spryker/util-text": "^1.2.0"
     },
     "require-dev": {
@@ -26,6 +28,9 @@
         "spryker/twig": "*",
         "spryker/validator": "*",
         "spryker/zed-navigation": "*"
+    },
+    "suggest": {
+        "spryker-feature/product-experience-management": "If you want to use visibility type features for product attributes."
     },
     "autoload": {
         "psr-4": {

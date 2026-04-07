@@ -131,6 +131,36 @@ class AttributeForm extends AbstractType
             ->addIsSuperField($builder, $options)
             ->addValuesField($builder, $options)
             ->addAllowInputField($builder, $options);
+
+        $data = $builder->getData();
+        $idProductManagementAttribute = is_array($data) ? ($data[static::FIELD_ID_PRODUCT_MANAGEMENT_ATTRIBUTE] ?? null) : null;
+
+        $options = $this->executeAttributeFormDataProviderExpanderPlugins($options, $idProductManagementAttribute);
+        $this->executeAttributeFormExpanderPlugins($builder, $options);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     *
+     * @return array<string, mixed>
+     */
+    protected function executeAttributeFormDataProviderExpanderPlugins(array $options, ?int $idProductManagementAttribute): array
+    {
+        foreach ($this->getFactory()->getAttributeFormDataProviderExpanderPlugins() as $attributeFormDataProviderExpanderPlugin) {
+            $options = $attributeFormDataProviderExpanderPlugin->expandOptions($options, $idProductManagementAttribute);
+        }
+
+        return $options;
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function executeAttributeFormExpanderPlugins(FormBuilderInterface $builder, array $options): void
+    {
+        foreach ($this->getFactory()->getAttributeFormExpanderPlugins() as $attributeFormExpanderPlugin) {
+            $attributeFormExpanderPlugin->buildForm($builder, $options);
+        }
     }
 
     /**

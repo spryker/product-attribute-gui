@@ -12,6 +12,10 @@
     {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Attribute list' } %}
 
         {% block widget_content %}
+            {% if tableFilterForm is defined and tableFilterForm.children | length > 0 %}
+                {% include '@ProductAttributeGui/_partials/table-filter-form.twig' with { form: tableFilterForm } %}
+            {% endif %}
+
             {{ attributeTable | raw }}
         {% endblock %}
 

@@ -10,6 +10,7 @@
             <thead>
             <tr>
                 <th>Key</th>
+                {% include '@ProductExperienceManagement/View/_partials/visibility-table-header.twig' ignore missing %}
                 {% for localeCode,localeData in locales %}
                     {% if localeCode == '_' %}
                         <th>{{ 'Default' }}</th>
@@ -36,6 +37,10 @@
                                     {{ key }}
                                 {% endif %}
                             </td>
+                            {% include '@ProductExperienceManagement/View/_partials/visibility-table-cell.twig' ignore missing with {
+                                metaAttributes: metaAttributes,
+                                key: key,
+                            } %}
                             {% for localeData in locales %}
                                 {% set localeCode = localeData.locale_name %}
                                 {% set hasLocale = localeCode != '_' %}

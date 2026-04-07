@@ -7,6 +7,7 @@
 
 namespace Spryker\Zed\ProductAttributeGui\Communication\Form\DataProvider;
 
+use Generated\Shared\Transfer\ProductManagementAttributeTransfer;
 use Orm\Zed\ProductAttribute\Persistence\SpyProductManagementAttribute;
 use Spryker\Zed\ProductAttributeGui\Communication\Form\AttributeForm;
 use Spryker\Zed\ProductAttributeGui\Dependency\Facade\ProductAttributeGuiToProductAttributeInterface;
@@ -24,9 +25,13 @@ class AttributeFormDataProvider
      */
     protected $productAttributeFacade;
 
+    /**
+     * @param array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeFormDataProviderExpanderPluginInterface> $attributeFormDataProviderExpanderPlugins
+     */
     public function __construct(
         ProductAttributeGuiToProductAttributeQueryContainerInterface $productAttributeQueryContainer,
-        ProductAttributeGuiToProductAttributeInterface $productAttributeFacade
+        ProductAttributeGuiToProductAttributeInterface $productAttributeFacade,
+        protected readonly array $attributeFormDataProviderExpanderPlugins = [],
     ) {
         $this->productAttributeQueryContainer = $productAttributeQueryContainer;
         $this->productAttributeFacade = $productAttributeFacade;
@@ -40,14 +45,17 @@ class AttributeFormDataProvider
     public function getData($idProductManagementAttribute = null)
     {
         if ($idProductManagementAttribute === null) {
-            return [
-                AttributeForm::FIELD_ALLOW_INPUT => false,
-            ];
+            return $this->executeDataExpanderPlugins(
+                [AttributeForm::FIELD_ALLOW_INPUT => false],
+                null,
+            );
         }
 
         $productManagementAttributeEntity = $this->getAttributeEntity($idProductManagementAttribute);
+        $productManagementAttributeTransfer = (new ProductManagementAttributeTransfer())
+            ->fromArray($productManagementAttributeEntity->toArray(), true);
 
-        return [
+        $data = [
             AttributeForm::FIELD_ID_PRODUCT_MANAGEMENT_ATTRIBUTE => $productManagementAttributeEntity->getIdProductManagementAttribute(),
             AttributeForm::FIELD_KEY => $productManagementAttributeEntity->getSpyProductAttributeKey()->getKey(),
             AttributeForm::FIELD_INPUT_TYPE => $productManagementAttributeEntity->getInputType(),
@@ -55,6 +63,8 @@ class AttributeFormDataProvider
             AttributeForm::FIELD_IS_SUPER => $productManagementAttributeEntity->getSpyProductAttributeKey()->getIsSuper(),
             AttributeForm::FIELD_VALUES => array_values($this->getValues($productManagementAttributeEntity)),
         ];
+
+        return $this->executeDataExpanderPlugins($data, $productManagementAttributeTransfer);
     }
 
     /**
@@ -69,14 +79,12 @@ class AttributeFormDataProvider
             AttributeForm::OPTION_VALUES_CHOICES => [],
         ];
 
-        if ($idProductManagementAttribute === null) {
-            return $options;
+        if ($idProductManagementAttribute !== null) {
+            $productManagementAttributeEntity = $this->getAttributeEntity($idProductManagementAttribute);
+
+            $options[AttributeForm::OPTION_IS_UPDATE] = true;
+            $options[AttributeForm::OPTION_VALUES_CHOICES] = $this->getValues($productManagementAttributeEntity);
         }
-
-        $productManagementAttributeEntity = $this->getAttributeEntity($idProductManagementAttribute);
-
-        $options[AttributeForm::OPTION_IS_UPDATE] = true;
-        $options[AttributeForm::OPTION_VALUES_CHOICES] = $this->getValues($productManagementAttributeEntity);
 
         return $options;
     }
@@ -107,5 +115,19 @@ class AttributeFormDataProvider
         return $this->productAttributeQueryContainer
             ->queryProductManagementAttribute()
             ->findOneByIdProductManagementAttribute($idProductManagementAttribute);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    protected function executeDataExpanderPlugins(array $data, ?ProductManagementAttributeTransfer $productManagementAttributeTransfer): array
+    {
+        foreach ($this->attributeFormDataProviderExpanderPlugins as $attributeFormDataProviderExpanderPlugin) {
+            $data = $attributeFormDataProviderExpanderPlugin->expandData($data, $productManagementAttributeTransfer);
+        }
+
+        return $data;
     }
 }

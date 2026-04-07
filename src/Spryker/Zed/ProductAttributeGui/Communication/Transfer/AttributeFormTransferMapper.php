@@ -16,6 +16,14 @@ use Symfony\Component\Form\FormInterface;
 class AttributeFormTransferMapper implements AttributeFormTransferMapperInterface
 {
     /**
+     * @param array<\Spryker\Zed\ProductAttributeGuiExtension\Dependency\Plugin\AttributeFormTransferMapperExpanderPluginInterface> $attributeFormTransferMapperExpanderPlugins
+     */
+    public function __construct(
+        protected readonly array $attributeFormTransferMapperExpanderPlugins = [],
+    ) {
+    }
+
+    /**
      * @param \Symfony\Component\Form\FormInterface $attributeForm
      *
      * @return \Generated\Shared\Transfer\ProductManagementAttributeTransfer
@@ -28,6 +36,10 @@ class AttributeFormTransferMapper implements AttributeFormTransferMapperInterfac
         $values = (array)$attributeForm->get(AttributeForm::FIELD_VALUES)->getData();
 
         $this->addAttributeValues($attributeTransfer, $values);
+
+        foreach ($this->attributeFormTransferMapperExpanderPlugins as $attributeFormTransferMapperExpanderPlugin) {
+            $attributeTransfer = $attributeFormTransferMapperExpanderPlugin->expandTransfer($attributeTransfer, $attributeForm);
+        }
 
         return $attributeTransfer;
     }
