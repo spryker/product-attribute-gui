@@ -84,11 +84,20 @@ function AttributeManager() {
         return $.inArray(key, currentKeys) > 0;
     };
 
-    _attributeManager.generateDataToAdd = function (key, idAttribute, attributeMetadata) {
+    _attributeManager.generateDataToAdd = function (key, idAttribute, attributeMetadata, extensionColumnValues) {
         var dataToAdd = [];
         var locales = _attributeManager.getLocaleCollection();
+        extensionColumnValues = extensionColumnValues || [];
 
         dataToAdd.push(key);
+
+        var localeCount = Object.keys(locales).length;
+        var columnCount = $('#productAttributesTable thead th').length;
+        var extensionColumnCount = columnCount - localeCount - 2;
+
+        for (var j = 0; j < extensionColumnCount; j++) {
+            dataToAdd.push(extensionColumnValues[j] !== undefined ? extensionColumnValues[j] : '');
+        }
 
         for (var i in locales) {
             var localeData = locales[i];
@@ -170,7 +179,8 @@ function AttributeManager() {
 
         _attributeManager.resetRemovedKey(key);
 
-        var dataToAdd = _attributeManager.generateDataToAdd(key, idAttribute, attributeMetadata);
+        var extensionColumnValues = JSON.parse(keyInput.attr('data-extension-column-values') || '[]');
+        var dataToAdd = _attributeManager.generateDataToAdd(key, idAttribute, attributeMetadata, extensionColumnValues);
 
         dataTable.DataTable().row.add(dataToAdd).draw(true);
 
@@ -453,6 +463,7 @@ $(document).ready(function () {
                                 allow_input: item.allow_input,
                                 is_super: item.is_super,
                                 input_type: item.input_type,
+                                extension_column_values: item.extension_column_values || [],
                             };
                         }),
                     );
@@ -468,6 +479,7 @@ $(document).ready(function () {
             input.attr('data-allow_input', ui.item.allow_input);
             input.attr('data-is_super', ui.item.is_super);
             input.attr('data-input_type', ui.item.input_type);
+            input.attr('data-extension-column-values', JSON.stringify(ui.item.extension_column_values || []));
 
             return false;
         },
@@ -480,6 +492,7 @@ $(document).ready(function () {
             input.attr('data-allow_input', ui.item.allow_input);
             input.attr('data-is_super', ui.item.is_super);
             input.attr('data-input_type', ui.item.input_type);
+            input.attr('data-extension-column-values', JSON.stringify(ui.item.extension_column_values || []));
 
             return false;
         },
