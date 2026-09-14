@@ -193,8 +193,8 @@ class AttributeForm extends AbstractType
                     'message' => 'This field contains illegal characters. It should contain only lower case letters, ' .
                         'digits, numbers, underscores ("_"), hyphens ("-") and colons (":").',
                 ]),
-                new Callback([
-                    'callback' => function ($key, ExecutionContextInterface $context) {
+                new Callback(
+                    callback: function ($key, ExecutionContextInterface $context) {
                         $keyCount = $this->getFactory()->getProductAttributeQueryContainer()
                             ->queryProductAttributeKeyByKeys([$key])
                             ->count();
@@ -203,8 +203,8 @@ class AttributeForm extends AbstractType
                             $context->addViolation('Attribute key is already used');
                         }
                     },
-                    'groups' => [static::GROUP_UNIQUE_KEY],
-                ]),
+                    groups: [static::GROUP_UNIQUE_KEY],
+                ),
             ],
             'disabled' => $options[static::OPTION_IS_UPDATE],
         ]);
