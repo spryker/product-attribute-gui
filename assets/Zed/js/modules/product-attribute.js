@@ -7,6 +7,9 @@
 
 require('../../sass/main.scss');
 
+var tableAccess = require('ZedGuiModules/libs/table/table-access');
+var attributesTableHandle = null;
+
 function castToBoolean($value) {
     return $value === 'true' || $value === '1' || $value === 1 || $value == 'true' || $value == true;
 }
@@ -153,7 +156,7 @@ function AttributeManager() {
         return dataToAdd;
     };
 
-    _attributeManager.addKey = function (key, idAttribute, dataTable) {
+    _attributeManager.addKey = function (key, idAttribute) {
         key = key.replace(/([^a-z0-9\_\-\:]+)/gi, '').toLowerCase();
 
         if (key === '' || !idAttribute) {
@@ -182,7 +185,7 @@ function AttributeManager() {
         var extensionColumnValues = JSON.parse(keyInput.attr('data-extension-column-values') || '[]');
         var dataToAdd = _attributeManager.generateDataToAdd(key, idAttribute, attributeMetadata, extensionColumnValues);
 
-        dataTable.DataTable().row.add(dataToAdd).draw(true);
+        attributesTableHandle.raw().row.add(dataToAdd).draw(true);
 
         updateAttributeInputsWithAutoComplete();
     };
@@ -314,14 +317,8 @@ function processAjaxResult(data, params) {
 
 function removeActionHandler() {
     var $link = $(this);
-    var dataTable = $('#productAttributesTable').DataTable();
 
-    /*$link.parents('tr').find("td input").each(function(index, input) {
-        $(input).val('');
-    });
-    $link.parents('tr').hide();*/
-
-    dataTable.row($link.parents('tr')).remove().draw();
+    attributesTableHandle.raw().row($link.parents('tr')).remove().draw();
 
     return false;
 }
@@ -414,15 +411,24 @@ function updateAttributeInputsWithAutoComplete() {
 }
 
 $(document).ready(function () {
+    var attributesTable = document.querySelector('#productAttributesTable');
+
+    if (!attributesTable) {
+        return;
+    }
+
+    tableAccess.requestTable(attributesTable, function (handle) {
+        attributesTableHandle = handle;
+    });
+
     var attributeManager = new AttributeManager();
 
     $('#addButton').on('click', function () {
         var input = $('#attribute_form_key');
-        var dataTable = $('#productAttributesTable');
         var idAttribute = input.attr('data-value');
         var key = input.val().trim();
 
-        attributeManager.addKey(key, idAttribute, dataTable);
+        attributeManager.addKey(key, idAttribute);
 
         $('.remove-item')
             .off('click')
@@ -503,18 +509,8 @@ $(document).ready(function () {
         return false;
     });
 
-    var productAttributesTable = $('#productAttributesTable').DataTable({
-        columnDefs: [
-            {
-                targets: -1,
-                orderable: false,
-            },
-        ],
-        destroy: true,
-    });
-
     $('#saveButton').on('click', function () {
-        productAttributesTable.search('').draw(false);
+        attributesTableHandle.raw().search('').draw(false);
         attributeManager.save();
     });
 
