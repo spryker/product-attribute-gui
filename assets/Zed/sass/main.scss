@@ -26,7 +26,7 @@ td.alignRight {
 }
 
 .sep_down:last-child {
-    border-bottom: solid 0px transparent !important;
+    border-bottom: solid 0 transparent !important;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -35,30 +35,36 @@ td.alignRight {
     padding-top: 4px;
     padding-bottom: 3px;
 }
+
 .select2-result-repository__avatar {
     float: left;
     width: 60px;
     margin-right: 10px;
 }
+
 .select2-result-repository__avatar img {
     width: 100%;
     height: auto;
     border-radius: 2px;
 }
+
 .select2-result-repository__meta {
     margin-left: 70px;
 }
+
 .select2-result-repository__title {
-    color: black;
+    color: #000;
     font-weight: bold;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
     line-height: 1.1;
     margin-bottom: 4px;
 }
+
 .select2-result-repository__forks,
 .select2-result-repository__stargazers {
     margin-right: 1em;
 }
+
 .select2-result-repository__forks,
 .select2-result-repository__stargazers,
 .select2-result-repository__watchers {
@@ -66,14 +72,17 @@ td.alignRight {
     color: #aaa;
     font-size: 11px;
 }
+
 .select2-result-repository__description {
     font-size: 13px;
     color: #777;
     margin-top: 4px;
 }
+
 .select2-results__option--highlighted .select2-result-repository__title {
-    color: white;
+    color: #fff;
 }
+
 .select2-results__option--highlighted .select2-result-repository__forks,
 .select2-results__option--highlighted .select2-result-repository__stargazers,
 .select2-results__option--highlighted .select2-result-repository__description,

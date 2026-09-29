@@ -11,7 +11,7 @@ var tableAccess = require('ZedGuiModules/libs/table/table-access');
 var attributesTableHandle = null;
 
 function castToBoolean($value) {
-    return $value === 'true' || $value === '1' || $value === 1 || $value == 'true' || $value == true;
+    return $value === 'true' || $value === '1' || $value === 1 || $value === true;
 }
 
 function AttributeManager() {
@@ -65,7 +65,7 @@ function AttributeManager() {
             },
             success: function (data) {
                 data = data.filter(function (value) {
-                    return value.key == key;
+                    return String(value.key) === String(key);
                 });
                 if (data.length > 0) {
                     hasAttribute = true;
@@ -157,7 +157,7 @@ function AttributeManager() {
     };
 
     _attributeManager.addKey = function (key, idAttribute) {
-        key = key.replace(/([^a-z0-9\_\-\:]+)/gi, '').toLowerCase();
+        key = key.replace(/([^a-z0-9_\-:]+)/gi, '').toLowerCase();
 
         if (key === '' || !idAttribute) {
             var $messageInput = $('#empty-attribute-key-message');
@@ -216,14 +216,14 @@ function AttributeManager() {
             var input = $(value);
             var attributeValue = input.val();
             var idAttribute = input.attr('data-id_attribute') || null;
-            var locale_code = input.attr('data-locale_code') || null;
+            var localeCode = input.attr('data-locale_code') || null;
             var key = input.attr('data-attribute_key') || null;
             var inputType = input.attr('data-input_type') || null;
 
             formData.push({
                 key: key,
                 id: idAttribute,
-                locale_code: locale_code,
+                locale_code: localeCode,
                 value: attributeValue,
                 input_type: inputType,
             });
@@ -294,27 +294,6 @@ function AttributeManager() {
     return _attributeManager;
 }
 
-/**
- * @param data
- * @param params
- * @returns {{results: *, pagination: {more: (boolean|number)}}}
- */
-function processAjaxResult(data, params) {
-    //{"id_attribute":1,"values":[{"id_product_management_attribute_value":1,"fk_locale":66,"value":"intel-atom-quad-core","translation":"Intel Atom Z3560 Quad-Core US"}]}
-    // parse the results into the format expected by Select2
-    // since we are using custom formatting functions we do not need to
-    // alter the remote JSON data, except to indicate that infinite
-    // scrolling can be used
-    params.page = params.page || 1;
-
-    return {
-        results: data.values,
-        pagination: {
-            more: params.page * 30 < data.total || 0,
-        },
-    };
-}
-
 function removeActionHandler() {
     var $link = $(this);
 
@@ -326,10 +305,10 @@ function removeActionHandler() {
 function updateAttributeInputsWithAutoComplete() {
     $('[data-allow_input=""],[data-allow_input="false"],[data-allow_input="0"]').each(function (key, value) {
         var input = $(value);
-        var is_super = castToBoolean(input.attr('data-is_super'));
-        var is_read_only = castToBoolean(input.attr('data-is_read_only'));
+        var isSuper = castToBoolean(input.attr('data-is_super'));
+        var isReadOnly = castToBoolean(input.attr('data-is_read_only'));
 
-        if (!is_super && !is_read_only) {
+        if (!isSuper && !isReadOnly) {
             input.on('focus click', function (event, ui) {
                 $(this).autocomplete('search', '');
             });
@@ -339,10 +318,10 @@ function updateAttributeInputsWithAutoComplete() {
     $('[data-is_attribute_input]').each(function (key, value) {
         var input = $(value);
         var id = input.attr('data-id_attribute') || null;
-        var locale_code = input.attr('data-locale_code') || null;
-        var is_read_only = castToBoolean(input.attr('data-is_read_only'));
+        var localeCode = input.attr('data-locale_code') || null;
+        var isReadOnly = castToBoolean(input.attr('data-is_read_only'));
 
-        if (!is_read_only) {
+        if (!isReadOnly) {
             input.on('dblclick', function (event, ui) {
                 $(this).autocomplete('search', '');
             });
@@ -357,7 +336,7 @@ function updateAttributeInputsWithAutoComplete() {
                     data: {
                         q: request.term,
                         id: id,
-                        locale_code: locale_code,
+                        locale_code: localeCode,
                     },
                     success: function (data) {
                         response(
