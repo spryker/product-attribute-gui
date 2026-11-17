@@ -79,7 +79,7 @@ class AttributeTranslationFormCollectionDataProvider
                 AttributeTranslationForm::FIELD_ID_PRODUCT_MANAGEMENT_ATTRIBUTE => $idProductManagementAttribute,
                 AttributeTranslationForm::FIELD_KEY => $attributeKey,
                 AttributeTranslationForm::FIELD_KEY_TRANSLATION => $this->getAttributeKeyTranslation($attributeKey, $localeTransfer),
-                AttributeTranslationForm::FIELD_TRANSLATE_VALUES => $this->getTranslateValues($idProductManagementAttribute),
+                AttributeTranslationForm::FIELD_TRANSLATE_VALUES => $this->hasTranslatedValues($idProductManagementAttribute),
                 AttributeTranslationForm::FIELD_VALUE_TRANSLATIONS => $this->getValueTranslations($idProductManagementAttribute, $localeTransfer->getIdLocale()),
             ];
         }
@@ -127,7 +127,7 @@ class AttributeTranslationFormCollectionDataProvider
      *
      * @return bool
      */
-    protected function getTranslateValues($idProductManagementAttribute)
+    protected function hasTranslatedValues($idProductManagementAttribute)
     {
         $translationCount = $this->productAttributeQueryContainer
             ->queryProductManagementAttributeValue()
